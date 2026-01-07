@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps Directions with Voice Assistance</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByZbRmNEXN2meMTPd1_zjsn34xcU0FPGw&libraries=places"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      #map {
+        height: 80vh;
+        width: 100%;
+        margin-top: 10px;
+      }
+      #controls {
+        margin: 10px;
+      }
+      input {
+        padding: 6px;
+        margin: 5px 0;
+        width: 250px;
+      }
+      button {
+        padding: 6px 12px;
+        margin: 2px;
+        cursor: pointer;
+      }
+      .voice-btn {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Google Maps Directions with Voice Assistance 🎤</h2>
+    <div id="controls">
+      <div>
+        <input id="source" type="text" placeholder="Enter source location" />
+        <button class="voice-btn" onclick="startVoice('source')">🎤</button>
+      </div>
+      
+      <div id="waypoints"></div>
+      <button onclick="addWaypoint()">+ Add Stop</button><br /><br />
+      
+      <div>
+        <input id="destination" type="text" placeholder="Enter destination location" />
+        <button class="voice-btn" onclick="startVoice('destination')">🎤</button>
+      </div>
+      
+      <br />
+      <button onclick="calculateRoute()">Get Directions</button>
+    </div>
+    <div id="map"></div>
+
+    <script>
+      var map, directionsService, directionsRenderer;
+      var waypointCount = 0;
+
+      function initMap() {
+        // Initialize map
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 5,
+          center: { lat: 20.5937, lng: 78.9629 } // India center
+        });
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        // Autocomplete for source & destination
+        new google.maps.places.Autocomplete(document.getElementById("source"));
+        new google.maps.places.Autocomplete(document.getElementById("destination"));
+      }
+
+      function addWaypoint() {
+        waypointCount++;
+        var waypointDiv = document.createElement("div");
+        waypointDiv.innerHTML =
+          '<input class="waypoint" id="waypoint' +
+          waypointCount +
+          '" type="text" placeholder="Enter stop ' +
+          waypointCount +
+          '" /> ' +
+          '<button class="voice-btn" onclick="startVoice(\'waypoint' +
+          waypointCount +
+          '\')">🎤</button>';
+        document.getElementById("waypoints").appendChild(waypointDiv);
+
+        new google.maps.places.Autocomplete(document.getElementById("waypoint" + waypointCount));
+      }
+
+      function calculateRoute() {
+        var source = document.getElementById("source").value;
+        var destination = document.getElementById("destination").value;
+
+        if (!source || !destination) {
+          alert("Please enter both source and destination.");
+          return;
+        }
+
+        var waypoints = [];
+        var waypointInputs = document.getElementsByClassName("waypoint");
+
+        for (var i = 0; i < waypointInputs.length; i++) {
+          if (waypointInputs[i].value !== "") {
+            waypoints.push({ location: waypointInputs[i].value, stopover: true });
+          }
+        }
+
+        var request = {
+          origin: source,
+          destination: destination,
+          waypoints: waypoints,
+          optimizeWaypoints: false,
+          travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        directionsService.route(request, function (result, status) {
+          if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(result);
+
+            // Speak confirmation
+            speakText("Showing directions from " + source + " to " + destination);
+          } else {
+            alert("Directions request failed: " + status);
+            speakText("Sorry, I couldn't fetch directions.");
+          }
+        });
+      }
+
+      // Voice recognition
+      function startVoice(fieldId) {
+        if (!('webkitSpeechRecognition' in window)) {
+          alert("Sorry, your browser does not support Speech Recognition.");
+          return;
+        }
+
+        var recognition = new webkitSpeechRecognition();
+        recognition.lang = "en-IN";
+        recognition.start();
+
+        recognition.onresult = function (event) {
+          var transcript = event.results[0][0].transcript;
+          document.getElementById(fieldId).value = transcript;
+          speakText("You said " + transcript);
+        };
+
+        recognition.onerror = function () {
+          speakText("Sorry, I couldn't hear you properly.");
+        };
+      }
+
+      // Text-to-speech
+      function speakText(text) {
+        var speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-IN";
+        window.speechSynthesis.speak(speech);
+      }
+
+      window.onload = initMap;
+    </script>
+  </body>
+</html>

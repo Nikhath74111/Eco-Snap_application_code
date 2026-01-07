@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>waste type detection and managment using deeplearning - Login/Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Hind:wght@300&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Hind', sans-serif;
+      background: linear-gradient(-45deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Navbar */
+    nav {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    nav .logo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.6rem;
+      color: #01579b;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #01579b;
+      font-weight: bold;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: #01579b;
+      bottom: -3px;
+      left: 0;
+      transition: 0.3s ease-in-out;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    /* Container */
+    .container {
+      max-width: 450px;
+      margin: 5rem auto 6rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .container h1 {
+      color: #01579b;
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    form:hover {
+      transform: translateY(-4px);
+    }
+
+    form h2 {
+      color: #0277bd;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.95);
+      font-size: 1rem;
+    }
+
+    form input:focus {
+      outline: 2px solid #0288d1;
+    }
+
+    form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0288d1;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    form button:hover {
+      background-color: #039be5;
+      transform: scale(1.03);
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: #01579b;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.95rem;
+      font-weight: bold;
+      box-shadow: 0 -8px 20px rgba(0,0,0,0.1);
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav ul {
+        flex-direction: column;
+        margin-top: 0.5rem;
+        gap: 10px;
+      }
+
+      .container {
+        margin: 3rem 1rem 5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">waste type detection and managment using deeplearning (Admin)</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Help</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h1>Admin Login & Register</h1>
+
+    <!-- Login Form -->
+    <form action="{{ url_for('logedin2') }}" method="post">
+      <h2>Admin Login</h2>
+      <input type="text" name="user_id" placeholder="Admin ID" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">🔐 Login</button>
+    </form>
+
+    <!-- Register Form -->
+    <form action="{{ url_for('register22') }}" method="post">
+      <h2>Register</h2>
+      <p style="text-align:center; font-size: 0.9rem; color: #333;">New admin? Click below to create an account.</p>
+      <button type="submit">📝 Register</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 — waste type detection and managment using deeplearning | Admin Portal
+  </footer>
+
+</body>
+</html>

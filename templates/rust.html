@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload | waste type detection and managment using deeplearning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Hind', sans-serif;
+      background: linear-gradient(135deg, #d1c4e9, #b39ddb, #9575cd);
+      background-size: 300% 300%;
+      animation: gradientMove 15s ease infinite;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      color: #4a148c;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .upload-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      width: 90%;
+      max-width: 400px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .upload-container h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #6a1b9a;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 1rem auto;
+      font-weight: bold;
+    }
+
+    img#output-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 1rem 0;
+      display: none;
+    }
+
+    button {
+      background-color: #7b1fa2;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #9c27b0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #4a148c;
+      background-color: rgba(255, 255, 255, 0.25);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h2>waste type detection and managment using deeplearning</h2>
+    <p><b>Please Upload a Clear  Image</b></p>
+  </header>
+
+  <div class="upload-container">
+    <form method="post" enctype="multipart/form-data">
+      <h3>Select  Image File:</h3>
+      <input type="file" name="file" accept="image/*" onchange="preview_image(event)" required />
+      <img id="output-image" class="preview-image" />
+      <button type="submit">Predict</button>
+    </form>
+  </div>
+
+  <footer>
+    &copy; 2025 — waste type detection and managment using deeplearning
+  </footer>
+
+  <script>
+    function preview_image(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const output = document.getElementById('output-image');
+        output.src = reader.result;
+        output.style.display = 'block';
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+
+</body>
+</html>

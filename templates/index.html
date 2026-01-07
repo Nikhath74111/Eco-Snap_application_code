@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>waste type detection and managment using deeplearning | Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Hind', sans-serif;
+      background: linear-gradient(135deg, #e1bee7, #ce93d8, #ba68c8);
+      background-size: 300% 300%;
+      animation: gradientBG 12s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem 2rem;
+      color: #4a148c;
+      text-align: center;
+      font-size: 1.8rem;
+      font-family: 'Pacifico', cursive;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .banner {
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      color: white;
+    }
+
+    .banner h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .banner h4 {
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: #4a148c;
+      margin: 3rem 0 1.5rem;
+    }
+
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0 2rem 4rem;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: scale(1.02);
+    }
+
+    .service-card img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .service-content {
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+    }
+
+    .service-content h4 {
+      font-size: 1.5rem;
+      color: #6a1b9a;
+      margin-bottom: 1rem;
+    }
+
+    .service-content p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .service-content a {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      background-color: #7b1fa2;
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .service-content a:hover {
+      background-color: #9c27b0;
+    }
+
+    .graph-section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .graph-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .graph-grid img {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      margin: 0 auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #4a148c;
+      font-size: 0.95rem;
+      backdrop-filter: blur(10px);
+    }
+
+    @media (min-width: 768px) {
+      .service-card {
+        flex-direction: row;
+      }
+
+      .service-card img {
+        width: 50%;
+      }
+
+      .service-content {
+        width: 50%;
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .graph-grid img {
+        max-width: 900px;
+      }
+    }
+  </style>
+  <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/69170d31c326601962b4eda2/1ja10n3sk';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</head>
+
+<body>
+
+  <header>
+    waste type detection and managment using deeplearning
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="banner">
+    <h3>waste type detection and managment using deeplearning</h3>
+    <h4><strong>Upload Clear and Proper  Images</strong></h4>
+  </section>
+
+  <!-- Services Section -->
+  <section>
+    <h3 class="section-title">Our Services</h3>
+    <div class="services">
+      <div class="service-card">
+        <img src="{{ url_for('static', filename='images/bg.png') }}" alt="Skin Cancer Image">
+        <div class="service-content">
+          <h4>waste type detection and managment using deeplearning</h4>
+          <p>Click the button below to upload your  image for analysis using our advanced Deep Learning system.</p>
+          <a href="{{ url_for('waste_prediction') }}">Upload Image</a>
+        </div>
+      </div>
+    </div>
+  </section>
+<section>
+    <h3 class="section-title">Our Services</h3>
+    <div class="services">
+      <div class="service-card">
+        <img src="{{ url_for('static', filename='images/bg.png') }}" alt="Skin Cancer Image">
+        <div class="service-content">
+          <h4>waste type detection and managment using deeplearning with real time scan image</h4>
+          <p>Click the button below use camera to capture image and predict.</p>
+          <a href="{{ url_for('waste_prediction2') }}">try it</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Footer -->
+  <footer>
+    © 2025 — waste type detection and managment using deeplearning
+  </footer>
+
+</body>
+</html>

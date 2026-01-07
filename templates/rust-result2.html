@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Google Maps API - Replace YOUR_API_KEY -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQKm8LXUlYHoyWn5nZmlrKtDo21dyDlW0&libraries=places,geometry&callback=initMap">
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Hind', sans-serif;
+      background: linear-gradient(to bottom right, #e8f5e9, #c8e6c9, #a5d6a7);
+      background-attachment: fixed;
+      padding-bottom: 100px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 3rem auto 2rem;
+      padding: 1rem;
+    }
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .card h3, .card h4 {
+      text-align: center;
+      margin-top: 0;
+    }
+    .main-prediction {
+      background-color: #e8f5e9;
+      font-size: 1.9rem;
+      color: #2e7d32;
+      font-weight: 600;
+      padding: 1.5rem;
+      border-radius: 12px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      color: #2e7d32;
+      border-bottom: 2px solid #a5d6a7;
+      padding-bottom: 0.3rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    ul li {
+      margin: 0.7rem 0;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    ul li strong {
+      color: #1b5e20;
+    }
+    .output-image {
+      display: block;
+      margin: 2rem auto;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .back-btn {
+      display: block;
+      width: 200px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    .back-btn button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .back-btn button:hover {
+      background: #1b5e20;
+    }
+    /* Map Section */
+    #map {
+      height: 400px;
+      width: 100%;
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .map-btn {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 auto 1rem;
+      display: block;
+    }
+    #status {
+      text-align: center;
+      font-weight: 600;
+      color: #2e7d32;
+      margin: 10px 0;
+      min-height: 1.2em;
+    }
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #2e7d32;
+      font-size: 0.95rem;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #ccc;
+    }
+    @media (max-width: 600px) {
+      .card { padding: 1.5rem; }
+      .main-prediction { font-size: 1.6rem; }
+      #map { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Main Prediction -->
+    <div class="card main-prediction">
+      <h3>{{ prediction }}</h3>
+    </div>
+
+    <!-- Waste Details + Map -->
+    <div class="card">
+      <h4>Waste Analysis Report</h4>
+      <ul>
+        <!-- Basic Info -->
+        <li><strong>Disposal Method:</strong> {{ disposal_method }}</li>
+        <li><strong>Recyclable:</strong> 
+          <span style="color: {{ 'green' if recyclable|lower == 'yes' else 'red' }}; font-weight: bold;">{{ recyclable }}</span>
+        </li>
+        <!-- Environmental Impact -->
+        <li class="section-title">Environmental Impact</li>
+        <li><strong>Energy Consumption (per unit):</strong> {{ energy_consumption }}</li>
+        <li><strong>Water Usage (per unit):</strong> {{ water_usage }}</li>
+        <li><strong>Decomposition Time:</strong> {{ decomposition_time }}</li>
+        <li><strong>Recycling Rate:</strong> {{ recycling_rate }}</li>
+        <!-- Hazards & Alternatives -->
+        <li class="section-title">Health & Safety</li>
+        <li><strong>Harmful Effects:</strong> {{ harmful_effect }}</li>
+        <li><strong>Suggested Alternative:</strong> {{ suggested_alternative }}</li>
+        <!-- Disposal Locations -->
+        <li class="section-title">Nearest Disposal Locations</li>
+        <li>{{ nearest_disposal_locations|replace('\n', '<br>')|safe }}</li>
+      </ul>
+
+      <!-- Map Section -->
+      <button id="locateBtn" class="map-btn">Use My Location</button>
+      <div id="map"></div>
+      <p id="status"></p>
+    </div>
+
+    <!-- Output Image -->
+    <img src="{{ url_for('static', filename='output_image.png') }}" alt="Detected Waste" class="output-image">
+
+    <!-- Back Button -->
+    <div class="back-btn">
+      <a href="/disease-predict2">
+        <button>Back to Capture</button>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 — Waste Type Identification System using Deep Learning
+  </footer>
+
+  <script>
+    // ---- Data from Flask ----
+    // Expected: nearest_disposal_locations = "Sai Waste Center, Navi Mumbai\nGreen Eco Hub, Andheri East"
+    const disposalLocations = {{ nearest_disposal_locations | replace('\n', ',') | tojson }};
+
+    let map, directionsService, directionsRenderer;
+    let userPos = null;
+    let markers = [];
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: { lat: 19.0760, lng: 72.8777 } // Mumbai fallback
+      });
+
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: false,
+        polylineOptions: { strokeColor: '#2e7d32', strokeWeight: 6 }
+      });
+      directionsRenderer.setMap(map);
+
+      addDisposalMarkers();
+      document.getElementById('locateBtn').onclick = getCurrentLocation;
+    }
+
+    function addDisposalMarkers() {
+      const geocoder = new google.maps.Geocoder();
+      disposalLocations.forEach((addr, i) => {
+        if (!addr.trim()) return;
+        geocoder.geocode({ address: addr }, (results, status) => {
+          if (status !== 'OK') {
+            console.warn('Geocode failed:', addr, status);
+            return;
+          }
+          const pos = results[0].geometry.location;
+
+          const marker = new google.maps.Marker({
+            map,
+            position: pos,
+            label: { text: `${i+1}`, color: 'white' },
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 18,
+              fillColor: '#2e7d32',
+              fillOpacity: 1,
+              strokeWeight: 3,
+              strokeColor: '#fff'
+            },
+            title: addr
+          });
+
+          markers.push({ marker, pos, addr });
+          marker.addListener('click', () => userPos && calcRoute(userPos, pos, addr));
+        });
+      });
+    }
+
+    function getCurrentLocation() {
+      setStatus('Locating you…');
+      if (!navigator.geolocation) return setStatus('Geolocation not supported');
+
+      navigator.geolocation.getCurrentPosition(
+        p => {
+          userPos = { lat: p.coords.latitude, lng: p.coords.longitude };
+          map.setCenter(userPos);
+          map.setZoom(13);
+
+          new google.maps.Marker({
+            map,
+            position: userPos,
+            icon: { url: 'http://maps.google.com/mapfiles/ms/micons/blue-dot.png' },
+            title: 'You are here'
+          });
+
+          setStatus('');
+          showNearest();
+        },
+        () => setStatus('Location access denied. Please enable location.')
+      );
+    }
+
+    function showNearest() {
+      if (!userPos || markers.length === 0) return;
+      let nearest = markers[0];
+      let min = Infinity;
+
+      markers.forEach(m => {
+        const d = google.maps.geometry.spherical.computeDistanceBetween(
+          new google.maps.LatLng(userPos), m.pos);
+        if (d < min) { min = d; nearest = m; }
+      });
+
+      calcRoute(userPos, nearest.pos, nearest.addr);
+    }
+
+    function calcRoute(origin, dest, name) {
+      directionsService.route(
+        { origin, destination: dest, travelMode: 'DRIVING' },
+        (res, status) => {
+          if (status !== 'OK') return setStatus('Could not calculate route');
+
+          directionsRenderer.setDirections(res);
+          const leg = res.routes[0].legs[0];
+          const info = `
+            <b>${name}</b><br>
+            Distance: ${leg.distance.text} • Time: ${leg.duration.text}<br>
+            <small>Tap any green pin to change destination</small>
+          `;
+          setStatus(info);
+        }
+      );
+    }
+
+    function setStatus(html) {
+      document.getElementById('status').innerHTML = html;
+    }
+  </script>
+</body>
+</html>

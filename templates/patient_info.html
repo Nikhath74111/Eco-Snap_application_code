@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Waste Data Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #f3e5f5);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: #673ab7;
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .footer {
+            margin-top: auto;
+            background: #4a148c;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #4a148c;
+            margin-bottom: 25px;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #43a047;
+        }
+
+        /* Table Styles */
+        .waste-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        .waste-table th {
+            background-color: #7e57c2;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .waste-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .waste-table tr:nth-child(even) {
+            background-color: #f8f0ff;
+        }
+        .waste-table tr:hover {
+            background-color: #ede7f6;
+        }
+        .recyclable-yes {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .recyclable-no {
+            color: #c62828;
+            font-weight: bold;
+        }
+        .location-list {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0;
+        }
+        .location-list li {
+            display: inline-block;
+            background: #e1f5fe;
+            color: #0277bd;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .summary {
+            background-color: #f3e5f5;
+            border-left: 5px solid #8e24aa;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .summary strong {
+            color: #6a1b9a;
+        }
+        .error {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .no-records {
+            text-align: center;
+            color: #6a1b9a;
+            font-style: italic;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        Waste Management Dashboard
+    </div>
+
+    <div class="container">
+        <h2>Search Waste Records by User ID</h2>
+        <form method="POST" action="{{ url_for('get_waste_info') }}">
+            <label for="user_id">Enter User ID:</label>
+            <input type="text" name="user_id" id="user_id" placeholder="e.g., USER001" required>
+            <button type="submit">Fetch Waste Records</button>
+        </form>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <!-- Waste Records Table -->
+        {% if waste_records %}
+        <div class="summary">
+            <strong>User ID:</strong> {{ user_id }} | 
+            <strong>Total Entries:</strong> {{ waste_records|length }} |
+            <strong>Latest Date:</strong> {{ waste_records[-1].date }}
+        </div>
+
+        <table class="waste-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Waste Type</th>
+                    <th>Description</th>
+                    <th>Disposal Method</th>
+                    <th>Recyclable</th>
+                    <th>Energy (kWh)</th>
+                    <th>Water (L)</th>
+                    <th>CO₂ Saved (kg)</th>
+                    <th>Hazards</th>
+                    <th>Disposal Locations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in waste_records %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td><strong>{{ record.waste_type }}</strong></td>
+                    <td>{{ record.description or '-' }}</td>
+                    <td>{{ record.disposal_method or '-' }}</td>
+                    <td>
+                        {% if record.recyclable == 'Yes' or record.recyclable == True %}
+                            <span class="recyclable-yes">Yes</span>
+                        {% else %}
+                            <span class="recyclable-no">No</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.energy_used or '0' }}</td>
+                    <td>{{ record.water_usage or '0' }}</td>
+                    <td><strong>{{ record.co2_saving or '0' }}</strong></td>
+                    <td>{{ record.hazards or '-' }}</td>
+                    <td>
+                        {% if record.disposal_locations and record.disposal_locations|length > 0 %}
+                        <ul class="location-list">
+                            {% for loc in record.disposal_locations %}
+                            <li>{{ loc }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <em>-</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% elif waste_records is defined and waste_records|length == 0 and not error %}
+        <div class="no-records">
+            No waste records found for User ID: <strong>{{ user_id }}</strong>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Waste Management System. All rights reserved.
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Error</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff7a7a, #ffb86b);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .popup {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      animation: popIn 0.5s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup h2 {
+      color: #ff3b3b;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .popup p {
+      color: #333;
+      font-size: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .popup button {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .popup button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="popup">
+    <h2>⚠️ Upload Error</h2>
+    <p>Please upload proper skin cancer images and try again.</p>
+    <button onclick="window.location.href='/disease-predict'">Return to Upload Page</button>
+  </div>
+</body>
+</html>
